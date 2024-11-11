@@ -153,6 +153,14 @@
 	max-width: 3em;
 }
 
+.Stats-Pokes :nth-child(4) {
+	display: none;
+}
+
+.Stats-Pokes :nth-child(5) {
+	display: none;
+}
+
 .PokeIndoId__stats-stat {
 	margin-bottom: 1em;
 	font-size: .55em;
@@ -355,6 +363,15 @@
 		flex-direction: column;
 		gap: .5em;
 	}
+
+	.Stats-Pokes :nth-child(4) {
+		display: block;
+	}
+	
+	.Stats-Pokes :nth-child(5) {
+		display: block;
+	}
+	
 	
 	.PokeIndoId__stats-titles {
 		display: flex;

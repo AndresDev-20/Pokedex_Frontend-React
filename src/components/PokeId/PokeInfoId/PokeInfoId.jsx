@@ -5,6 +5,24 @@ function PokeInfoId({ Data }) {
 	const [background, setBackground] = useState("");
 	const [colors, setColors] = useState("");
 	const type = Data?.types[0].type.name
+
+	const [widthUnit, setWidthUnit] = useState('%');
+
+	useEffect(() => {
+	  const handleResize = () => {
+		const mediaQuery = window.matchMedia('(max-width: 599px)');
+		if (mediaQuery.matches) {
+		  setWidthUnit('%'); 
+		} else {
+		  setWidthUnit('mm'); 
+		}
+	  };
+	  handleResize();
+	  window.addEventListener('resize', handleResize);
+	  return () => window.removeEventListener('resize', handleResize);
+	}, []);
+  
+
 	const typeColors = {
 		fire: "#E35825",
 		grass: "#ABDAC6",
@@ -136,7 +154,8 @@ console.log(colors)
 					<li className='PokeIndoId__stats-raya'></li>
 					<img src="../../../../image/logo-white.png" alt="" />
 				</ul>
-				{
+				<div className='Stats-Pokes'>
+					{
 					Data?.stats.map(stat => (
 						<div className='PokeIndoId__stats-stat'>
 							<div className='PokeIndoId__stats-titles'>
@@ -144,11 +163,13 @@ console.log(colors)
 								<h1><span>{stat.base_stat}</span>/<span>150</span> </h1>
 							</div>
 							<div className='PokeIndoId__stats-barra'>
-								<div style={{width: `${stat.base_stat}mm`}}></div>
+								<div style={{width: `${stat.base_stat}${widthUnit}`}}></div>
 							</div>
 						</div>
 					))
 				}
+				</div>
+				
 			</div>
 
 		</div>
