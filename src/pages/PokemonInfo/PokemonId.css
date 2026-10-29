@@ -1,26 +1,87 @@
-
-
-.Volver > button {
-	background-color: var(--color3);
-	color: var(--color1);	
-	border: none;
-	padding: .3em;
-	font-size: 1em;
-	width: 100%;
-	max-width: 8em;
-	border-top: 3px solid var(--color3);
-	border-right: 3px solid var(--color3);
-	border-bottom: 3px solid var(--color3);
-	position: fixed;
-	border-radius: 0em .3em .3em 0em;
-	cursor: pointer;
-	transition: color 1000ms ease;
-	z-index: 1000;
+.PokemonId {
+	padding-bottom: 3em;
 }
 
-.Volver > button:hover {
-	color: var(--color2);
-	border-bottom: 3px solid var(--color1);
-	border-top: 3px solid var(--color1);
-	border-right: 3px solid var(--color1);
+.PokemonId__loading,
+.PokemonId__error {
+	min-height: 60vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1em;
+	text-align: center;
+	padding: 1em;
+	animation: fadeUp .5s var(--ease-out) both;
+}
+
+.PokemonId__nav {
+	display: flex;
+	justify-content: space-between;
+	gap: 1em;
+	width: 100%;
+	max-width: 700px;
+	margin: 1em auto 0;
+	padding: 0 1em;
+	animation: fadeUp .5s var(--ease-out) both;
+}
+
+.PokemonId__nav-btn {
+	display: flex;
+	align-items: center;
+	gap: .6em;
+	padding: .5em 1em .5em .6em;
+	border-radius: 999px;
+	text-decoration: none;
+	color: var(--text-on-dark);
+	text-transform: capitalize;
+	background: rgba(255, 255, 255, .07);
+	border: 1px solid rgba(255, 255, 255, .12);
+	backdrop-filter: blur(8px);
+	transition: background .3s, transform .3s var(--ease-spring);
+	max-width: 48%;
+}
+
+.PokemonId__nav-btn.is-next {
+	padding: .5em .6em .5em 1em;
+	text-align: right;
+}
+
+.PokemonId__nav-btn > span:not(.PokemonId__nav-arrow) {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: .9em;
+}
+
+.PokemonId__nav-btn small {
+	opacity: .55;
+	font-size: .8em;
+}
+
+.PokemonId__nav-arrow {
+	flex-shrink: 0;
+	width: 1.8em;
+	height: 1.8em;
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	background: var(--color1);
+	font-size: 1.2em;
+	line-height: 1;
+	transition: transform .3s var(--ease-spring);
+}
+
+.PokemonId__nav-btn:hover {
+	background: rgba(255, 255, 255, .14);
+}
+
+.PokemonId__nav-btn:hover .PokemonId__nav-arrow {
+	transform: translateX(-4px);
+}
+
+.PokemonId__nav-btn.is-next:hover .PokemonId__nav-arrow {
+	transform: translateX(4px);
 }

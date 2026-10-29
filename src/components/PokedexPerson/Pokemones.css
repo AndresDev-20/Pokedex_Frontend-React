@@ -1,7 +1,16 @@
 .Pokemones {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1em;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(15.5em, 1fr));
+	gap: 1.6em;
 	padding: 1em;
-	justify-content: center;
+	width: 100%;
+	max-width: 80em;
+	margin: auto;
+}
+
+@media (max-width: 420px) {
+	.Pokemones {
+		grid-template-columns: 1fr;
+		padding: 1em 1.2em;
+	}
 }

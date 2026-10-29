@@ -1,0 +1,51 @@
+.ScrollTop {
+	position: fixed;
+	right: 1.2em;
+	bottom: 1.2em;
+	width: 3.2em;
+	height: 3.2em;
+	border-radius: 50%;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	z-index: 200;
+	background: transparent;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(30px) scale(.6) rotate(-180deg);
+	transition: opacity .4s, transform .5s var(--ease-spring);
+}
+
+.ScrollTop.is-visible {
+	opacity: 1;
+	pointer-events: auto;
+	transform: none;
+}
+
+.ScrollTop__ball {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	border: 3px solid var(--color3);
+	background: linear-gradient(to bottom, var(--color1) 0 45%, var(--color3) 45% 55%, white 55%);
+	box-shadow: 0 8px 20px -4px rgba(227, 53, 13, .7);
+	position: relative;
+	transition: transform .4s var(--ease-spring);
+}
+
+.ScrollTop__ball::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	width: 30%;
+	height: 30%;
+	border-radius: 50%;
+	background: white;
+	border: 3px solid var(--color3);
+}
+
+.ScrollTop:hover .ScrollTop__ball {
+	transform: translateY(-4px) rotate(25deg);
+}

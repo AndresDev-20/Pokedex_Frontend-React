@@ -1,11 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Moderustic:wght@300..800&display=swap');
 :root {
-    --color1: red;
+    --color1: #E3350D;
+    --color1-dark: #B3240A;
     --color2: white;
-    --color3: black;
+    --color3: #111;
     --color4: rgba(31, 234, 214, 0.203);
     --color5: rgb(201, 201, 201);
     --color6: rgba(231, 228, 228, 0.652);
+
+    --bg: #0B1026;
+    --bg-soft: #141B3D;
+    --surface: #ffffff;
+    --surface-soft: #F4F6FB;
+    --text: #1B1F33;
+    --text-soft: #6B7290;
+    --text-on-dark: #EEF1FF;
+    --radius: 1.2em;
+    --shadow: 0 10px 30px -10px rgba(0, 0, 0, .45);
+    --ease-out: cubic-bezier(.22, 1, .36, 1);
+    --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
 }
 
 *{
@@ -15,8 +28,79 @@
     font-family: "Moderustic", sans-serif;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(80, 110, 255, .25), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(227, 53, 13, .18), transparent 35%),
+        radial-gradient(circle at 50% 100%, rgba(31, 234, 214, .12), transparent 45%),
+        var(--bg);
+    background-attachment: fixed;
+    color: var(--text-on-dark);
+}
+
 img {
     display: block;
     width: 100%;
     object-fit: contain;
+}
+
+button {
+    font: inherit;
+}
+
+::selection {
+    background: var(--color1);
+    color: white;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--color1), #7a1a06);
+    border-radius: 10px;
+}
+
+/* Transición entre páginas */
+/* "backwards" evita que quede un transform aplicado al terminar (rompería el header fijo) */
+.page {
+    animation: pageIn .6s var(--ease-out) backwards;
+}
+
+@keyframes pageIn {
+    from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+    to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px) scale(.96); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

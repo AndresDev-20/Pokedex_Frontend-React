@@ -1,0 +1,55 @@
+.Pokeball__wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1em;
+	padding: 2em;
+}
+
+.Pokeball {
+	--size: 4em;
+	width: var(--size);
+	height: var(--size);
+	border-radius: 50%;
+	position: relative;
+	background: linear-gradient(to bottom, var(--color1) 0 46%, var(--color3) 46% 54%, white 54% 100%);
+	border: calc(var(--size) * .06) solid var(--color3);
+	box-shadow: 0 0 25px rgba(227, 53, 13, .5);
+	animation: pokeballShake 1.2s ease-in-out infinite;
+}
+
+.Pokeball__button {
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	width: 34%;
+	height: 34%;
+	border-radius: 50%;
+	background: white;
+	border: calc(var(--size) * .06) solid var(--color3);
+	animation: pokeballBlink 1.2s ease-in-out infinite;
+}
+
+.Pokeball__text {
+	color: var(--text-on-dark);
+	opacity: .8;
+	letter-spacing: .05em;
+	animation: pokeballText 1.2s ease-in-out infinite;
+}
+
+@keyframes pokeballShake {
+	0%, 100% { transform: rotate(0); }
+	20% { transform: rotate(-22deg); }
+	40% { transform: rotate(18deg); }
+	55% { transform: rotate(-10deg); }
+	70% { transform: rotate(0) scale(1.05); }
+}
+
+@keyframes pokeballBlink {
+	0%, 60%, 100% { background: white; box-shadow: none; }
+	75% { background: #ffe9a8; box-shadow: 0 0 12px 3px #ffd34d; }
+}
+
+@keyframes pokeballText {
+	50% { opacity: .4; }
+}

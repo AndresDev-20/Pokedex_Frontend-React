@@ -1,0 +1,118 @@
+.Pagination {
+	--accent: var(--color1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .4em;
+	flex-wrap: wrap;
+	padding: .6em;
+	margin: 1.5em auto;
+	width: fit-content;
+	max-width: 100%;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .06);
+	border: 1px solid rgba(255, 255, 255, .1);
+	backdrop-filter: blur(12px);
+	box-shadow: var(--shadow);
+	animation: fadeUp .5s var(--ease-out) both;
+}
+
+.Pagination__pages {
+	display: flex;
+	align-items: center;
+	gap: .3em;
+	list-style: none;
+}
+
+.Pagination__btn {
+	min-width: 2.4em;
+	height: 2.4em;
+	padding: 0 .6em;
+	border: none;
+	border-radius: 999px;
+	background: transparent;
+	color: var(--text-on-dark);
+	font-size: .95em;
+	font-weight: 600;
+	cursor: pointer;
+	position: relative;
+	transition: background .25s, color .25s, transform .25s var(--ease-spring), box-shadow .25s;
+}
+
+.Pagination__btn:hover:not(:disabled) {
+	background: rgba(255, 255, 255, .12);
+	transform: translateY(-2px);
+}
+
+.Pagination__btn:active:not(:disabled) {
+	transform: scale(.92);
+}
+
+.Pagination__btn:disabled {
+	opacity: .3;
+	cursor: not-allowed;
+}
+
+.Pagination__btn:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+.Pagination__arrow,
+.Pagination__edge {
+	font-size: 1.2em;
+	line-height: 1;
+}
+
+.Pagination__page.is-active {
+	background: var(--accent);
+	color: white;
+	box-shadow: 0 0 0 3px rgba(255, 255, 255, .12), 0 6px 18px -4px var(--accent);
+	animation: pagePop .45s var(--ease-spring);
+}
+
+.Pagination__gap {
+	color: var(--text-soft);
+	padding: 0 .2em;
+	user-select: none;
+}
+
+.Pagination--compact {
+	background: var(--surface-soft);
+	border-color: transparent;
+	box-shadow: none;
+}
+
+.Pagination--compact .Pagination__btn {
+	color: var(--text);
+}
+
+.Pagination--compact .Pagination__btn:hover:not(:disabled) {
+	background: rgba(0, 0, 0, .07);
+}
+
+.Pagination--compact .Pagination__page.is-active {
+	color: white;
+}
+
+@keyframes pagePop {
+	0% { transform: scale(.6); }
+	100% { transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+	.Pagination {
+		gap: .15em;
+		padding: .4em;
+	}
+
+	.Pagination__btn {
+		min-width: 2.1em;
+		height: 2.1em;
+		font-size: .85em;
+	}
+
+	.Pagination__edge {
+		display: none;
+	}
+}

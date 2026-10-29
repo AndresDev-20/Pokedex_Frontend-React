@@ -1,37 +1,145 @@
 .CartPokemon {
+	--rx: 0deg;
+	--ry: 0deg;
+	--mx: 50%;
+	--my: 0%;
 	width: 100%;
-	max-width: 18em;
-	border-radius: .7em;
+	perspective: 900px;
 	cursor: pointer;
-	transition: transform 0.3s ease
+	outline: none;
+	animation: fadeUp .6s var(--ease-out) var(--delay) both;
 }
 
-.pokeinfo {
-	display: none;
+.CartPokemon_inner {
+	position: relative;
+	height: 100%;
+	border-radius: var(--radius);
+	overflow: hidden;
+	background: var(--surface);
+	color: var(--text);
+	box-shadow: var(--shadow);
+	border: 4px solid var(--type-color);
+	transform: rotateX(var(--rx)) rotateY(var(--ry));
+	transform-style: preserve-3d;
+	transition: transform .25s ease-out, box-shadow .35s, translate .35s var(--ease-spring);
 }
 
-.CartPokemon:hover {
-	transform: scale(1.02);
+.CartPokemon:hover .CartPokemon_inner,
+.CartPokemon:focus-visible .CartPokemon_inner {
+	translate: 0 -8px;
+	box-shadow: 0 22px 40px -14px var(--type-color), 0 0 0 1px rgba(255, 255, 255, .2);
+}
+
+.CartPokemon:focus-visible .CartPokemon_inner {
+	outline: 3px solid white;
+	outline-offset: 3px;
+}
+
+/* Brillo que sigue al cursor */
+.CartPokemon_shine {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, .45), transparent 45%);
+	opacity: 0;
+	transition: opacity .3s;
+	mix-blend-mode: soft-light;
+}
+
+.CartPokemon:hover .CartPokemon_shine {
+	opacity: 1;
 }
 
 .CartPokemon_header {
+	position: relative;
 	width: 100%;
+	height: 9.5em;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-top: 0em;
-	padding-top: 1.5em;
+	justify-content: center;
+	background: var(--type-gradient);
+	overflow: hidden;
 }
 
-.CartPokemon_info {
-	background-color: var(--color2);
-	margin-top: -3.35em;
-	padding-top: 3em;
-	border-radius: 0em 0em .3em .3em;
+.CartPokemon_id {
+	position: absolute;
+	top: .6em;
+	left: .8em;
+	z-index: 2;
+	font-weight: 800;
+	font-size: .85em;
+	color: white;
+	background: rgba(0, 0, 0, .25);
+	padding: .15em .6em;
+	border-radius: 999px;
+	backdrop-filter: blur(4px);
+}
+
+/* Pokébola decorativa de fondo */
+.CartPokemon_ball {
+	position: absolute;
+	width: 11em;
+	height: 11em;
+	right: -3em;
+	top: -2.5em;
+	border-radius: 50%;
+	border: 1.1em solid rgba(255, 255, 255, .18);
+	transition: transform .8s var(--ease-out);
+}
+
+.CartPokemon_ball::before {
+	content: "";
+	position: absolute;
+	left: -1.1em;
+	right: -1.1em;
+	top: 50%;
+	height: 1.1em;
+	transform: translateY(-50%);
+	background: rgba(255, 255, 255, .18);
+}
+
+.CartPokemon_ball::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	width: 3.4em;
+	height: 3.4em;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .18);
+}
+
+.CartPokemon:hover .CartPokemon_ball {
+	transform: rotate(140deg) scale(1.1);
+}
+
+.CartPokemon_info-img {
+	position: relative;
+	z-index: 1;
+	align-self: end;
+	margin-bottom: -2.2em;
 }
 
 .CartPokemon_info-img > img {
-	max-width: 10em;
+	width: 9.5em;
+	height: 9.5em;
+	filter: drop-shadow(0 10px 10px rgba(0, 0, 0, .3));
+	opacity: 0;
+	transform: scale(.7) translateY(12px);
+	transition: opacity .5s, transform .6s var(--ease-spring);
+}
+
+.CartPokemon_info-img > img.is-loaded {
+	opacity: 1;
+	transform: none;
+}
+
+.CartPokemon:hover .CartPokemon_info-img > img.is-loaded {
+	transform: scale(1.12) translateY(-6px) translateZ(40px);
+}
+
+.CartPokemon_info {
+	background-color: var(--surface);
+	padding-top: 2.6em;
 }
 
 .CartPokemon_info-titles {
@@ -39,136 +147,121 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	gap: .5em;
+	padding: 0 1em .9em;
+	border-bottom: 1px solid #eceef4;
 }
 
 .CartPokemon_info-titles > h1 {
-	font-size: 1.5em;
-	font-weight: 500;
-}
-
-.CartPokemon_info-titles h1::first-letter {
-    text-transform: uppercase;
+	font-size: 1.4em;
+	font-weight: 700;
+	color: var(--type-color);
+	text-transform: capitalize;
+	text-align: center;
+	line-height: 1.1;
 }
 
 .CartPokemon_power {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: .8em;
+	gap: .4em;
+	flex-wrap: wrap;
 }
 
-.CartPokemon_power p::first-letter {
-    text-transform: uppercase;
-}
-
-.slash {
-    margin: 0 0.2em;
-    color: black; 
-}
-
-.CartPokemon_info-titles > p {
-	font-size: .6em;
-	margin-top: .5em;
-	border-bottom: .5px solid var(--color5);
-	width: 100%;
-	text-align: center;
-	padding-bottom: 1em;
-	color: var(--color5);
+.CartPokemon_chip {
+	color: white;
+	font-size: .72em;
+	font-weight: 700;
+	letter-spacing: .04em;
+	padding: .3em .9em;
+	border-radius: 999px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+	box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .15);
 }
 
 .CartPokemon_habilite {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+	gap: .9em 1.2em;
 	list-style: none;
-	padding: 0em 1em 1.5em 1em;
+	padding: 1em 1.2em 1.3em;
 }
 
 .CartPokemon_habilite > li {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size:.51em;
-	margin-top: 2em;
-	color: var(--color5);
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: baseline;
+	font-size: .66em;
+	font-weight: 600;
+	letter-spacing: .05em;
+	color: var(--text-soft);
 }
 
 .CartPokemon_habilite > li > span {
-	font-size: 1.5em;
-	color: black;
-	margin-top: .4em;
-	font-weight: 600;
+	font-size: 1.6em;
+	font-weight: 800;
+	color: var(--type-color);
 }
 
-@media (min-width: 700px) {
-	.CartPokemon {
-		width: 100%;
-		max-width: 17em;
-		border-radius: .7em;
-	}
+.CartPokemon_bar {
+	grid-column: 1 / -1;
+	height: 5px;
+	margin-top: .35em;
+	border-radius: 99px;
+	background: #edf0f6;
+	overflow: hidden;
+}
 
-	.CartPokemon_info-titles > h1 {
-		font-size: 1.5em;
-		font-weight: 500;
-	}
-	
-	.CartPokemon_info {
-		background-color: var(--color2);
-		margin-top: -3.15em;
-		padding-top: 2.8em;
-		border-radius: 0em 0em .3em .3em;
-	}
-	
-	.CartPokemon_info-img > img {
-		max-width: 9.5em;
-	}
+.CartPokemon_bar > div {
+	height: 100%;
+	border-radius: inherit;
+	background: var(--type-gradient);
+	transform-origin: left;
+	animation: barGrow 1s var(--ease-out) calc(var(--delay) + .3s) both;
+}
 
-	.CartPokemon_info-titles h1::first-letter {
-		text-transform: uppercase;
-	}
-	
-	.CartPokemon_power {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: .9em;
-	}
-	
-	.CartPokemon_power p::first-letter {
-		text-transform: uppercase;
-	}
-	
-	.slash {
-		margin: 0 0.2em;
-		color: black; 
-	}
-	
-	.CartPokemon_info-titles > p {
-		font-size: .7em;
-		margin-top: .5em;
-		width: 100%;
-		text-align: center;
-		padding-bottom: .5em;
-	}
-	
-	.CartPokemon_habilite {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		list-style: none;
-		padding: 0em 1em 1.5em 1em;
-	}
-	
-	.CartPokemon_habilite > li {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		font-size: .8em;
-		margin-top: 1.3em;
-	}
-	
-	.CartPokemon_habilite > li > span {
-		font-size: 1.5em;
-		color: black;
-		margin-top: .3em;
-		font-weight: 600;
-	}
+@keyframes barGrow {
+	from { transform: scaleX(0); }
+	to { transform: scaleX(1); }
+}
+
+/* Skeleton de carga */
+.CartPokemon--skeleton {
+	cursor: default;
+	animation: fadeUp .4s var(--ease-out) var(--delay) both;
+}
+
+.CartPokemon--skeleton .CartPokemon_inner {
+	border-color: rgba(255, 255, 255, .08);
+	background: rgba(255, 255, 255, .05);
+	box-shadow: none;
+}
+
+.Skeleton {
+	border-radius: .5em;
+	background: linear-gradient(90deg, rgba(255, 255, 255, .06) 25%, rgba(255, 255, 255, .16) 50%, rgba(255, 255, 255, .06) 75%);
+	background-size: 200% 100%;
+	animation: shimmer 1.3s linear infinite;
+}
+
+.Skeleton--header {
+	height: 9.5em;
+	border-radius: 0;
+}
+
+.Skeleton--line {
+	height: .9em;
+	margin: 1em auto 0;
+	width: 60%;
+}
+
+.Skeleton--line.short {
+	width: 35%;
+	margin-bottom: 1.6em;
+}
+
+@keyframes shimmer {
+	from { background-position: 200% 0; }
+	to { background-position: -200% 0; }
 }

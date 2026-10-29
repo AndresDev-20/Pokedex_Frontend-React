@@ -1,61 +1,136 @@
 .PokeMovimient{
-	width: 100%;
-	max-width: 370px;
-	margin: auto;
-	margin-top: 4em;
-	box-shadow: 0px 2px 16px 0px #00000026;
-	margin-bottom: 3rem;
-	padding: 1em;
+	width: calc(100% - 2em);
+	max-width: 700px;
+	margin: 2em auto 0;
+	padding: 1.4em;
+	background: var(--surface);
+	color: var(--text);
+	border-radius: 1.6em;
+	box-shadow: var(--shadow);
+	animation: fadeUp .7s var(--ease-out) .25s both;
+}
+
+.PokeMovimient .PokeIndoId__stats-title small {
+	font-size: .65em;
+	color: var(--text-soft);
+	font-weight: 500;
+}
+
+.Pokemovimient__tools {
+	display: flex;
+	flex-direction: column;
+	gap: .8em;
+	margin-top: .4em;
+}
+
+.Pokemovimient__tools > input {
+	font: inherit;
+	padding: .7em 1.1em;
+	border-radius: 999px;
+	border: 1px solid #dfe3ee;
+	background: var(--surface-soft);
+	transition: border-color .25s, box-shadow .25s;
+}
+
+.Pokemovimient__tools > input:focus {
+	outline: none;
+	border-color: var(--type-color, var(--color1));
+	box-shadow: 0 0 0 4px rgba(227, 53, 13, .15);
+}
+
+.Pokemovimient__filters {
+	display: flex;
+	gap: .4em;
+	flex-wrap: wrap;
+}
+
+.Pokemovimient__filters > button {
+	border: 1px solid #dfe3ee;
+	background: white;
+	padding: .35em .9em;
+	border-radius: 999px;
+	font-size: .85em;
+	cursor: pointer;
+	color: var(--text);
+	transition: background .25s, color .25s, transform .25s var(--ease-spring);
+}
+
+.Pokemovimient__filters > button:hover {
+	transform: translateY(-2px);
+}
+
+.Pokemovimient__filters > button.is-active {
+	background: var(--color3);
+	border-color: var(--color3);
+	color: white;
 }
 
 .Pokemovimient__moves {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(10.5em, 1fr));
 	list-style: none;
-	justify-content: space-around;
-	gap: .2em;
-	margin-top: 3em;
+	gap: .6em;
+	margin-top: 1.4em;
+	min-height: 6em;
 }
 
 .Pokemovimient__moves > li {
-	background-color: var(--color5);
-	text-align: center;
-	margin-bottom: .7em;
-	padding: .5em;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
+	gap: .5em;
+	background: var(--surface-soft);
+	border: 1px solid #e8ebf3;
+	padding: .6em .8em;
+	border-radius: .9em;
+	text-transform: capitalize;
+	font-size: .9em;
+	animation: fadeUp .4s var(--ease-out) calc(var(--i) * 25ms) both;
+	transition: transform .25s var(--ease-spring), box-shadow .25s, border-color .25s;
+}
+
+.Pokemovimient__moves > li:hover {
+	transform: translateY(-3px);
+	border-color: #cfd4e2;
+	box-shadow: 0 8px 18px -10px rgba(0, 0, 0, .35);
+}
+
+.Pokemovimient__badge {
+	flex-shrink: 0;
+	font-size: .72em;
+	font-weight: 700;
+	padding: .2em .6em;
+	border-radius: 999px;
+	background: #e4e7f0;
+	color: #4b5170;
+	text-transform: none;
+}
+
+.Pokemovimient__badge.level-up { background: #fff1c7; color: #9a6a00; }
+.Pokemovimient__badge.machine { background: #dbeaff; color: #1b5bb8; }
+.Pokemovimient__badge.egg { background: #ffe0ec; color: #b0336a; }
+.Pokemovimient__badge.tutor { background: #dcf5e4; color: #20804a; }
+
+.Pokemovimient__moves > li.Pokemovimient__empty {
+	grid-column: 1 / -1;
 	justify-content: center;
-	border-radius: 1em;
+	color: var(--text-soft);
+	background: transparent;
+	border-style: dashed;
 }
 
 @media (min-width: 600px) {
-	.PokeMovimient{
-		width: 100%;
-		max-width: 700px;
-		margin: auto;
-		margin-top: 4em;
-		box-shadow: 0px 2px 16px 0px #00000026;
-		margin-bottom: 3rem;
-		padding: 2.5em;
+	.PokeMovimient {
+		padding: 2.2em;
 	}
-	
-	.Pokemovimient__moves {
-		display: flex;
-		flex-wrap: wrap;
-		list-style: none;
-		justify-content: space-around;
-		gap: .2em;
-		margin-top: 3em;
-	}
-	
-	.Pokemovimient__moves > li {
-		background-color: var(--color5);
-		text-align: center;
-		margin-bottom: .7em;
-		padding: .5em;
-		display: flex;
+
+	.Pokemovimient__tools {
+		flex-direction: row;
 		align-items: center;
-		justify-content: center;
-		border-radius: 1em;
+		justify-content: space-between;
+	}
+
+	.Pokemovimient__tools > input {
+		flex: 0 1 16em;
 	}
 }

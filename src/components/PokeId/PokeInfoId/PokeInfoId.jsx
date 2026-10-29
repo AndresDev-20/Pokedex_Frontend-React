@@ -1,148 +1,108 @@
 import { useEffect, useState } from 'react';
 import './PokeinfoId.css'
+import { STAT_LABELS, formatId, getArtwork, getType } from '../../../utils/pokemonTypes';
 
-function PokeInfoId({ Data }) {
-	const [background, setBackground] = useState("");
-	const [colors, setColors] = useState("");
-	const type = Data?.types[0].type.name
-
-	const [widthUnit, setWidthUnit] = useState('%');
+// Número que sube desde 0 hasta su valor final.
+function CountUp({ value, duration = 900 }) {
+	const [current, setCurrent] = useState(0);
 
 	useEffect(() => {
-	  const handleResize = () => {
-		const mediaQuery = window.matchMedia('(max-width: 599px)');
-		if (mediaQuery.matches) {
-		  setWidthUnit('%'); 
-		} else {
-		  setWidthUnit('mm'); 
-		}
-	  };
-	  handleResize();
-	  window.addEventListener('resize', handleResize);
-	  return () => window.removeEventListener('resize', handleResize);
-	}, []);
-  
+		let frame;
+		const start = performance.now();
+		const tick = (now) => {
+			const progress = Math.min((now - start) / duration, 1);
+			setCurrent(Math.round(value * (1 - Math.pow(1 - progress, 3))));
+			if (progress < 1) frame = requestAnimationFrame(tick);
+		};
+		frame = requestAnimationFrame(tick);
+		return () => cancelAnimationFrame(frame);
+	}, [value, duration]);
 
-	const typeColors = {
-		fire: "#E35825",
-		grass: "#ABDAC6",
-		electric: "#2B319B",
-		normal: "#BC6B7C",
-		fighting: "#F1613C",
-		flying: "#D9F2FD",
-		poison: "#A564E3",
-		ground: "#895C1A",
-		rock: "#8D8D94",
-		bug: "#3BB039",
-		ghost: "#454AA8",
-		steel: "#728881",
-		water: "#1479FB",
-		psychic: "#C23867",
-		ice: "#64CBF5",
-		dragon: "#56A4AE",
-		dark: "#0D1211",
-		fairy: "#0D1211",
-		default: "#ffffff",
-	  };
-	useEffect(() => {
-		if (type === "fire") {
-		  setBackground("linear-gradient(#F96D6F, #E35825, #E8AE1B)");
-		  setColors("#E35825")
-		} else if (type === "grass") {
-		  setBackground("linear-gradient(#7EC6C5, #ABDAC6, #CAE099)");
-		  setColors("#ABDAC6")
-		} else if (type === "electric") {
-		  setBackground("linear-gradient(#0C1395, #2B319B, #7075D9)");
-		  setColors("#2B319B")
-		} else if (type === "normal") {
-		  setBackground("linear-gradient(#735259, #BC6B7C, #7C3F4C)");
-		  setColors("#BC6B7C")
-		} else if (type === "fighting") {
-		    setBackground("linear-gradient(#96402A, #F1613C, #CB735D)");
-		  setColors("#F1613C")
-		} else if (type === "flying") {
-		  setBackground("#D9F2FD");
-		  setColors("D9F2FD")
-		} else if (type === "poison") {
-			setBackground("linear-gradient(#5B3184, #A564E3, #CE9BFF)");
-			setColors("#A564E3")
-		} else if (type === "ground") {
-			setBackground("linear-gradient(#654008, #895C1A, #D69638)");
-			setColors("#895C1A")
-		} else if (type === "rock") {
-			setBackground("linear-gradient(#7E7E7E, #8D8D94, #D3D3D3)");
-			setColors("#8D8D94")
-		} else if (type === "bug") {
-			setBackground("linear-gradient(#62DB60, #3BB039, #AAFFA8)");
-			setColors("#3BB039")
-		} else if (type === "ghost") {
-			setBackground("linear-gradient(#323569, #454AA8, #787DDA)");
-			setColors("#454AA8")
-		} else if (type === "steel") {
-			setBackground("linear-gradient(#5E736C, #728881, #A8A8A8)");
-			setColors("#728881")
-		} else if (type === "water") {
-		  setBackground("linear-gradient(#133258, #1479FB, #82B2F1)");
-		  setColors("#1479FB")
-		} else if (type === "psychic") {
-			setBackground("linear-gradient(#971B45, #C23867, #CD7D98)");
-			setColors("#C23867")
-		} else if (type === "ice") {
-			setBackground("linear-gradient(#6FBEDF, #64CBF5, #BDEBFE)");
-			setColors("#64CBF5")
-		} else if (type === "dragon") {
-			setBackground("linear-gradient(#478A93, #56A4AE, #A2BEC1)");
-			setColors("#56A4AE")
-		} else if (type === "dark") {
-			setBackground("linear-gradient(#030706, #0D1211, #5A5E5D)");
-			setColors("#0D1211")
-		} else if (type === "fairy") {
-			setBackground("linear-gradient(#030706, #0D1211, #5A5E5D)");
-			setColors("#0D1211")
-		} else {
-		  setBackground("#ffffff");
-		}
-	  }, [type]);
+	return current;
+}
 
-console.log(colors)
+const getSpanish = (entries = [], key) =>
+	(entries.find(e => e.language.name === "es") || entries.find(e => e.language.name === "en"))?.[key];
+
+function PokeInfoId({ Data, Species }) {
+	const [shiny, setShiny] = useState(false);
+	const [playing, setPlaying] = useState(false);
+	const { color, gradient } = getType(Data.types[0].type.name);
+
+	const description = getSpanish(Species?.flavor_text_entries, "flavor_text")?.replace(/[\f\n\r]/g, " ");
+	const genus = getSpanish(Species?.genera, "genus");
+	const total = Data.stats.reduce((sum, s) => sum + s.base_stat, 0);
+	const cry = Data.cries?.latest || Data.cries?.legacy;
+
+	const playCry = () => {
+		if (!cry) return;
+		const audio = new Audio(cry);
+		audio.volume = .35;
+		setPlaying(true);
+		audio.onended = () => setPlaying(false);
+		audio.play().catch(() => setPlaying(false));
+	};
+
 	return (
-		<div className='PokeInfoIdf'>
-			<div className='PokeInfoIdf__Header' style={{background: `${background}`}}>
+		<div className='PokeInfoIdf' style={{ "--type-color": color, "--type-gradient": gradient }}>
+			<div className='PokeInfoIdf__Header'>
+				<span className='PokeInfoIdf__ring'></span>
+				<span className='PokeInfoIdf__ring two'></span>
+				<div className='PokeInfoIdf__tools'>
+					<button
+						className={`PokeInfoIdf__tool ${shiny ? "is-active" : ""}`}
+						onClick={() => setShiny(s => !s)}
+						title="Ver versión shiny"
+					>
+						✨ Shiny
+					</button>
+					{cry && (
+						<button className={`PokeInfoIdf__tool ${playing ? "is-active" : ""}`} onClick={playCry} title="Escuchar su grito">
+							{playing ? "🔊" : "🔈"} Grito
+						</button>
+					)}
+				</div>
 				<figure className='PokeInfoIdf__figure'>
-					<img src={Data?.sprites.other["official-artwork"].front_default} alt="" />
+					<img key={shiny} src={getArtwork(Data, shiny)} alt={Data.name} />
 				</figure>
 			</div>
 
 			<div className='PokeInfoIdf__info'>
-				<h1 className='PokeInfoIdf__id'>#{Data?.id}</h1>
+				<h1 className='PokeInfoIdf__id'>{formatId(Data.id)}</h1>
 				<ul className='PokeInfoIdf__titles'>
 					<li className='PokeInfoIdf__Title-one'></li>
-					<li style={{color: `${colors}`}} className='PokeInfoIdf__Title-two'>{Data?.name}</li>
+					<li className='PokeInfoIdf__Title-two'>{Data.name.replace(/-/g, " ")}</li>
 					<li className='PokeInfoIdf__Title-one'></li>
 				</ul>
+				{genus && <p className='PokeInfoIdf__genus'>{genus}</p>}
+				{description && <p className='PokeInfoIdf__description'>“{description}”</p>}
+
 				<ul className='PokeInfoIdf__dates'>
-					<li><span className='info_title'>Peso</span> <span>{Data?.weight}</span></li>
-					<li><span className='info_title'>Altura</span> <span>{Data?.height}</span></li>
+					<li><span className='info_title'>Peso</span> <span>{Data.weight / 10} kg</span></li>
+					<li><span className='info_title'>Altura</span> <span>{Data.height / 10} m</span></li>
+					<li><span className='info_title'>Exp. base</span> <span>{Data.base_experience ?? "—"}</span></li>
 				</ul>
+
 				<div className='PokeInfoIdf__TypeHability'>
 					<div>
 						<h1>Tipo</h1>
 						<ul className='PokeInfoIdf__TypeHability-ul type'>
-							{
-								Data?.types.map(Type => (
-										<li style={{ backgroundColor: typeColors[Type.type.name] || typeColors.default, color: "white", display: "flex", alignItems: "center", justifyContent: "center" }} key={Type.slot}>{Type.type.name}</li>
-								))
-							}
+							{Data.types.map((Type, i) => (
+								<li style={{ backgroundColor: getType(Type.type.name).color, "--i": i }} key={Type.slot}>
+									{getType(Type.type.name).label}
+								</li>
+							))}
 						</ul>
 					</div>
-						<div>
+					<div>
 						<h1>Habilidades</h1>
 						<ul className='PokeInfoIdf__TypeHability-ul habi'>
-							{
-								Data?.abilities.map(Habili => (
-										<li key={Habili.slot}>{Habili.ability.name}</li>
-								))
-							}
+							{Data.abilities.map((Habili, i) => (
+								<li key={Habili.ability.name} style={{ "--i": i }} title={Habili.is_hidden ? "Habilidad oculta" : undefined}>
+									{Habili.ability.name.replace(/-/g, " ")}
+									{Habili.is_hidden && <small> (oculta)</small>}
+								</li>
+							))}
 						</ul>
 					</div>
 				</div>
@@ -152,26 +112,26 @@ console.log(colors)
 				<ul className='PokeIndoId__stats-ul'>
 					<li className='PokeIndoId__stats-title'>Stats</li>
 					<li className='PokeIndoId__stats-raya'></li>
-					<img src="../../../../image/logo-white.png" alt="" />
+					<li className='PokeIndoId__ball' aria-hidden="true"></li>
 				</ul>
 				<div className='Stats-Pokes'>
-					{
-					Data?.stats.map(stat => (
-						<div className='PokeIndoId__stats-stat'>
+					{Data.stats.map((stat, i) => (
+						<div className='PokeIndoId__stats-stat' key={stat.stat.name} style={{ "--i": i }}>
 							<div className='PokeIndoId__stats-titles'>
-								<h1>{stat.stat.name}</h1>
-								<h1><span>{stat.base_stat}</span>/<span>150</span> </h1>
+								<h1>{STAT_LABELS[stat.stat.name] || stat.stat.name}</h1>
+								<h1><span><CountUp value={stat.base_stat} /></span>/<span>255</span></h1>
 							</div>
 							<div className='PokeIndoId__stats-barra'>
-								<div style={{width: `${stat.base_stat}${widthUnit}`}}></div>
+								<div style={{ width: `${Math.min(stat.base_stat / 180, 1) * 100}%` }}></div>
 							</div>
 						</div>
-					))
-				}
+					))}
+					<div className='PokeIndoId__stats-total'>
+						<span>Total</span>
+						<strong><CountUp value={total} duration={1200} /></strong>
+					</div>
 				</div>
-				
 			</div>
-
 		</div>
 	)
 }
